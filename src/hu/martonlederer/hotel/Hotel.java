@@ -114,11 +114,31 @@ public class Hotel {
 		return room.getCount() - (int) takenRooms;
 	}
 	
+	public class NoAvailableRoomsException extends Exception {
+	    public NoAvailableRoomsException(String message) {
+	        super(message);
+	    }
+	}
+	
 	/**
 	 * Foglalás hozzáadása
 	 * @param r Új foglalás példánya
 	 */
-	public void addReservation(Reservation r) {
+	public void addReservation(Reservation r) throws NoAvailableRoomsException {
+		// get if room is available for the dates
+		if (getAvailableRoomsOf(r.getRoom(), r.getCheckinDate(), r.getCheckoutDate()) == 0) {
+			throw new NoAvailableRoomsException("Nincs szabad szoba az adott időpontra");
+		}
 		
+		// add points
+		r.getCustomer().addPoints((int) r.getNightsCount());
+		
+		// add customer
+		if (!customers.contains(r.getCustomer())) {
+			customers.add(r.getCustomer());
+		}
+		
+		// add reservation
+		reservations.add(r);
 	}
 }
