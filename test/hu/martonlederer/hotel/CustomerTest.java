@@ -24,7 +24,7 @@ class CustomerTest {
 		assertTrue(customer.getName().equals(name));
 		assertTrue(customer.getPhoneNumber().equals(num));
 		assertTrue(customer.getEmail().equals(email));
-		assertEquals(customer.getPoints(), 0, 0);
+		assertEquals(0, customer.getPoints(), 0);
 	}
 
 	@Test
@@ -32,7 +32,7 @@ class CustomerTest {
 		assertTrue(customer.getName().equals(name));
 		assertTrue(customer.getPhoneNumber().equals(num));
 		assertTrue(customer.getEmail().equals(email));
-		assertEquals(customer.getPoints(), existingPoints, 0);
+		assertEquals(existingPoints, customer.getPoints(), 0);
 	}
 	
 	@Test
@@ -40,13 +40,13 @@ class CustomerTest {
 		int addCount = 45;
 		customer.addPoints(addCount);
 		
-		assertEquals(customer.getPoints(), existingPoints + addCount, 0);
+		assertEquals(existingPoints + addCount, customer.getPoints(), 0);
 	}
 	
 	@Test
 	void testMinusPoints() {
-		customer.addPoints(-1 * (existingPoints + 1));
+		customer.addPoints(-existingPoints - 1);
 		
-		assertEquals(customer.getPoints(), 0, 0);
+		assertEquals(0, customer.getPoints(), 0);
 	}
 }

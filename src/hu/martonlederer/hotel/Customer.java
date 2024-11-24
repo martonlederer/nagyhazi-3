@@ -69,7 +69,7 @@ public class Customer {
 	 */
 	public void addPoints(int v) {
 		// nem lehet nullánál kisebb az ügyfél pontszáma
-		if (this.points + v < 0) v = this.points;
+		if (this.points + v < 0) v = -this.points;
 		this.points += v;
 	}
 }
