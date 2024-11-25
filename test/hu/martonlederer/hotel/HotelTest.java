@@ -206,4 +206,18 @@ class HotelTest {
 		assertTrue(reservationsForDay.contains(res1));
 		assertTrue(reservationsForDay.contains(res2));
 	}
+	
+	@Test
+	void testFindCustomer() throws NoAvailableRoomsException {
+		Customer customer = new Customer("Other Test", "test@test.hu", "+35408931266", 500);
+		hotel.addReservation(new Reservation(
+			customer,
+			otherRoom,
+			LocalDate.parse("2024-05-16"),
+			LocalDate.parse("2024-05-19"),
+			List.of()
+		));
+		
+		assertEquals(customer, hotel.findCustomerByName(customer.getName()));
+	}
 }

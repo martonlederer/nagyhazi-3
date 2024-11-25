@@ -129,7 +129,7 @@ public class MainFrame extends JFrame {
         next.addActionListener(new DateNavBtnListener(1));
         editHotelBtn.addActionListener((e) -> editHotel());
         addBtn.addActionListener((e) -> {
-        	ReservationDialog dialog = new ReservationDialog(this, null);
+        	ReservationDialog dialog = new ReservationDialog(this, null, hotel);
         	dialog.setVisible(true);
         });
         

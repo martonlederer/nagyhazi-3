@@ -306,4 +306,17 @@ public class Hotel {
 	public List<Reservation> getReservationsForDay(LocalDate date) {
 		return streamTakenRooms(date).toList();
 	}
+	
+	/**
+	 * Megkeres egy ügyfelet a neve szerint
+	 * @param name Ügyfél neve
+	 * @return Ügyfél vagy null
+	 */
+	public Customer findCustomerByName(String name) {
+		for (Customer c : customers) {
+			if (c.getName().equals(name)) return c;
+		}
+		
+		return null;
+	}
 }
