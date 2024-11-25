@@ -23,7 +23,7 @@ class HotelTest {
 			"Ez egy példa hotel, ami Tihanyban van",
 			HotelRating.Comfortable,
 			"8236 Tihany, Rév utca 2.",
-			Set.of(room),
+			Set.of(room, new Room("Another", 10000, 2, 2, List.of())),
 			Set.of()
 		);
 	}
@@ -57,6 +57,21 @@ class HotelTest {
 		
 		assertEquals(1, hotel.getAvailability(room, LocalDate.parse("2024-05-13")));
 		assertEquals(2, hotel.getAvailability(room, LocalDate.parse("2024-05-17")));
+	}
+	
+	@Test
+	void testTotalAvailability() throws NoAvailableRoomsException {
+		Reservation res = new Reservation(
+			new Customer("John Doe", "test@test.com", "+3614556789"),
+			room,
+			LocalDate.parse("2024-05-12"),
+			LocalDate.parse("2024-05-16"),
+			List.of()
+		);
+		hotel.addReservation(res);
+		
+		assertEquals(3, hotel.getAvailability(null, LocalDate.parse("2024-05-13")));
+		assertEquals(4, hotel.getAvailability(null, LocalDate.parse("2024-05-17")));
 	}
 	
 	@Test

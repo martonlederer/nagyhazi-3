@@ -103,20 +103,24 @@ public class Hotel {
 	
 	/**
 	 * Hány elérhető szoba van egy adott napon
-	 * @param room Szobatípus
+	 * @param room Szobatípus (ha null, akkor minden szobát néz a rendszer)
 	 * @param date A megadott nap
 	 * @return Elérhető szobák száma
 	 */
 	public int getAvailability(Room room, LocalDate date) {
+		int roomCount = room != null ? room.getCount() : rooms.stream()
+			.map(Room::getCount)
+			.reduce(0, (sum, curr) -> sum + curr);
+
 		long takenRooms = reservations.stream()
 			.filter(
-				(reservation) -> reservation.getRoom() == room && 
+				(reservation) -> (reservation.getRoom() == room || room == null) && 
 					date.isAfter(reservation.getCheckinDate()) &&
 					date.isBefore(reservation.getCheckoutDate())
 			)
 			.count();
 		
-		return room.getCount() - (int) takenRooms;
+		return roomCount - (int) takenRooms;
 	}
 	
 	public class NoAvailableRoomsException extends Exception {
