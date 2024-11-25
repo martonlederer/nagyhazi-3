@@ -3,6 +3,9 @@ package hu.martonlederer.hotel;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.*;
 import java.util.List;
 import java.util.Set;
 
@@ -16,7 +19,8 @@ class HotelTest {
 	Room room;
 
 	@BeforeEach
-	void setup() {
+	void setup() throws IOException {
+		Hotel.savePath = "test_hotel.json";
 		room = new Room("Duplex", 1000, 2, 2, List.of());
 		hotel = new Hotel(
 			"Tihany Hotel",
@@ -26,6 +30,8 @@ class HotelTest {
 			Set.of(room, new Room("Another", 10000, 2, 2, List.of())),
 			Set.of()
 		);
+		
+		Files.deleteIfExists(Paths.get(Hotel.savePath));
 	}
 
 	@Test
@@ -42,6 +48,25 @@ class HotelTest {
 		assertEquals(1, hotel.getReservations().size());
 		assertTrue(hotel.getReservations().contains(res));
 		assertEquals(3, res.getCustomer().getPoints());
+	}
+	
+	@Test
+	void testRemoveReservation() throws NoAvailableRoomsException {
+		Reservation res = new Reservation(
+			new Customer("John Doe", "test@test.com", "+3614556789"),
+			room,
+			LocalDate.parse("2024-07-21"),
+			LocalDate.parse("2024-07-28"),
+			List.of()
+		);
+		hotel.addReservation(res);
+		
+		assertEquals(1, hotel.getReservations().size());
+
+		hotel.removeReservation(res);
+		
+		assertEquals(0, hotel.getReservations().size());
+		assertEquals(0, res.getCustomer().getPoints());
 	}
 	
 	@Test
@@ -110,5 +135,34 @@ class HotelTest {
 			NoAvailableRoomsException.class,
 			() -> hotel.addReservation(res)
 		);
+	}
+	
+	@Test
+	void testHasSavedData() throws IOException {
+		assertFalse(Hotel.hasSavedData());
+		
+		FileWriter fw = new FileWriter(Hotel.savePath);
+		fw.write("{}");
+		fw.close();
+		
+		assertTrue(Hotel.hasSavedData());
+	}
+	
+	@Test
+	void testSave() throws IOException {
+		Hotel.save(hotel);
+		
+		assertTrue(Hotel.hasSavedData());
+	}
+	
+	@Test
+	void testLoad() throws IOException {
+		Hotel.save(hotel);
+		Hotel other = Hotel.load();
+		
+		assertTrue(hotel.getName().equals(other.getName()));
+		assertTrue(hotel.getDescription().equals(other.getDescription()));
+		assertTrue(hotel.getDescription().equals(other.getDescription()));
+		assertEquals(hotel.getRating(), other.getRating());
 	}
 }

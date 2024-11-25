@@ -27,6 +27,8 @@ public class Hotel {
 	
 	private List<Reservation> reservations;
 	
+	public static String savePath = "hotel.json";
+	
 	/**
 	 * Hotel példány konstruktora
 	 * @param name Hotel neve
@@ -78,6 +80,38 @@ public class Hotel {
 		Set<ExtraService> extras
 	) {
 		this(name, description, rating, location, rooms, extras, Set.of(), List.of());
+	}
+	
+	/**
+	 * A hotel nevének lekérdezése
+	 * @return A hotel neve
+	 */
+	public String getName() {
+		return name;
+	}
+	
+	/**
+	 * A hotel leírásának lekérdezése
+	 * @return A hotel leírása
+	 */
+	public String getDescription() {
+		return description;
+	}
+	
+	/**
+	 * A hotel minősítésének lekérdezése
+	 * @return A hotel minősítése
+	 */
+	public HotelRating getRating() {
+		return rating;
+	}
+	
+	/**
+	 * A hotel helyének lekérdezése
+	 * @return A hotel helye
+	 */
+	public String getLocation() {
+		return location;
 	}
 	
 	/**
@@ -170,7 +204,7 @@ public class Hotel {
 	 * hotel fájl
 	 */
 	public static boolean hasSavedData() {
-		File file = new File("hotel.json");
+		File file = new File(savePath);
 		
 		return file.exists();
 	}
@@ -184,13 +218,15 @@ public class Hotel {
 		// build json
 		Gson gson = new GsonBuilder()
 			.setPrettyPrinting()
+			.registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
 			.create();
 		String data = gson.toJson(hotel);
 		
 		// save json
-		BufferedWriter writer = new BufferedWriter(new FileWriter("hotel.json"));
+		BufferedWriter writer = new BufferedWriter(new FileWriter(savePath));
 		
 		writer.write(data);
+		writer.close();
 	}
 	
 	/**
@@ -199,12 +235,17 @@ public class Hotel {
 	 * @return A betöltött hotel
 	 */
 	public static Hotel load() throws IOException {
-		Gson gson = new Gson();
+		Gson gson = new GsonBuilder()
+			.registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+			.create();
 		
 		// read json string
-		BufferedReader reader = new BufferedReader(new FileReader("hotel.json"));
+		BufferedReader reader = new BufferedReader(new FileReader(savePath));
 		
-		return gson.fromJson(reader, Hotel.class);
+		Hotel hotel = gson.fromJson(reader, Hotel.class);
+		reader.close();
+		
+		return hotel;
 	}
 	
 	/**
