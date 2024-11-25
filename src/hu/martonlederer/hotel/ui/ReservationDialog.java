@@ -22,6 +22,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -32,6 +33,7 @@ import javax.swing.event.DocumentListener;
 import hu.martonlederer.hotel.Customer;
 import hu.martonlederer.hotel.ExtraService;
 import hu.martonlederer.hotel.Hotel;
+import hu.martonlederer.hotel.Hotel.NoAvailableRoomsException;
 import hu.martonlederer.hotel.Reservation;
 import hu.martonlederer.hotel.Room;
 
@@ -103,6 +105,11 @@ public class ReservationDialog extends JDialog {
 				.map(Customer::getName)
 				.toArray(String[]::new)
 		);
+		
+		if (customer != null) {
+			existingCustomers.setSelectedItem(customer.getName());
+		}
+		
 		nameField = new JTextField(customer != null ? customer.getName() : null);
 		nameField.setPreferredSize(new Dimension(200, 25));
 		nameField.getDocument().addDocumentListener(new DocumentListener() {
@@ -136,16 +143,23 @@ public class ReservationDialog extends JDialog {
         		.map(Room::getName)
         		.toArray(String[]::new)
         );
+        
+        if (reservation != null) {
+        	roomType.setSelectedItem(reservation.getRoom().getName());
+        }
+        
         addWithLabel("Room type:", roomType);
         
         fromDate = new JSpinner(new SpinnerDateModel(
-            new Date(),
+            reservation != null ? getDate(reservation.getCheckinDate()) : new Date(),
             new Date(),
             null,
             java.util.Calendar.DAY_OF_MONTH
         ));
         toDate = new JSpinner(new SpinnerDateModel(
-            getDate(LocalDate.now().plusDays(1)),
+            getDate(
+            	reservation != null ? reservation.getCheckoutDate() : LocalDate.now().plusDays(1)
+            ),
             new Date(),
             null,
             java.util.Calendar.DAY_OF_MONTH
@@ -210,10 +224,15 @@ public class ReservationDialog extends JDialog {
 		
 		if (reservation != null) {
 			JButton deleteBtn = new JButton("Delete");
+			deleteBtn.addActionListener((e) -> {
+				hotel.removeReservation(reservation);
+				dispose();
+			});
 			btnsPanel.add(deleteBtn, BorderLayout.NORTH);
 		}
 
 		JButton saveBtn = new JButton("Save");
+		saveBtn.addActionListener((e) -> save());
 		btnsPanel.add(saveBtn, BorderLayout.SOUTH);
 		
 		add(btnsPanel, BorderLayout.SOUTH);
@@ -251,34 +270,69 @@ public class ReservationDialog extends JDialog {
 	}
 	
 	/**
+	 * Visszaadja a foglalást az aktuális adatok alapján
+	 * @return A generált foglalás
+	 */
+	private Reservation getReservation() {
+		Room room = null;
+		
+		for (Room r : hotel.getRooms())
+			if (r.getName().equals((String) roomType.getSelectedItem()))
+				room = r;
+		
+		if (room == null) return null;
+		
+		Customer c = hotel.findCustomerByName(nameField.getText());
+		
+		if (c == null) {
+			c = new Customer(
+				nameField.getText(),
+				emailField.getText(),
+				phoneNumberField.getText()
+			);
+		}
+		
+		return new Reservation(
+			c,
+			room,
+			getLocalDate((Date) fromDate.getValue()),
+			getLocalDate((Date) toDate.getValue()),
+			addedExtras
+		);
+	}
+	
+	/**
 	 * Frissíti a teljes árat
 	 */
 	private void updateTotalPrice() {
-		Optional<Room> res = hotel.getRooms().stream()
-			.filter((r) -> r.getName().equals((String) roomType.getSelectedItem()))
-			.findFirst();
+		Reservation predicted = getReservation();
+		
+		if (predicted == null) return;
 
-		res.ifPresent((room) -> {
-			Customer c = hotel.findCustomerByName(nameField.getText());
-			
-			if (c == null) {
-				c = new Customer(
-					nameField.getText(),
-					emailField.getText(),
-					phoneNumberField.getText()
-				);
-			}
-			
-			Reservation predicted = new Reservation(
-				c,
-				room,
-				getLocalDate((Date) fromDate.getValue()),
-				getLocalDate((Date) toDate.getValue()),
-				addedExtras
-			);
-			
-			priceSumLabel.setText("Summary: HUF" + Integer.toString(predicted.getTotalPrice()));
-			pointsEarnedLabel.setText("Points earned: " + Long.toString(predicted.getNightsCount()));
-		});
+		priceSumLabel.setText("Summary: HUF" + Integer.toString(predicted.getTotalPrice()));
+		pointsEarnedLabel.setText("Points earned: " + Long.toString(predicted.getNightsCount()));
+	}
+	
+	/**
+	 * Elmenti a foglalást és bezárja a dialógust
+	 */
+	public void save() {
+		Reservation newReservation = getReservation();
+		
+		if (reservation != null) {
+			hotel.removeReservation(reservation);
+		}
+		
+		try {
+			hotel.addReservation(newReservation);
+			dispose();
+		} catch (NoAvailableRoomsException e) {
+			JOptionPane.showMessageDialog(
+				this,
+		         "No available rooms for this date!",
+		        "Error",
+		        JOptionPane.ERROR_MESSAGE
+		    );
+		}
 	}
 }

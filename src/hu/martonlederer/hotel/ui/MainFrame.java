@@ -131,6 +131,12 @@ public class MainFrame extends JFrame {
         addBtn.addActionListener((e) -> {
         	ReservationDialog dialog = new ReservationDialog(this, null, hotel);
         	dialog.setVisible(true);
+        	
+        	try {
+				Hotel.save(hotel);
+			} catch (IOException e1) {
+				System.out.println("Failed to save hotel file");
+			}
         });
         
         nav.add(editHotelBtn);
