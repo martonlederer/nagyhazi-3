@@ -141,4 +141,16 @@ public class Hotel {
 		// add reservation
 		reservations.add(r);
 	}
+	
+	/**
+	 * Foglalás törlése
+	 * @param r Törlendő foglalás
+	 */
+	public void removeReservation(Reservation r) {
+		// pontok törlése
+		int pointsToRemove = (int) r.getNightsCount();
+		
+		r.getCustomer().addPoints(-pointsToRemove);
+		reservations.remove(r);
+	}
 }
