@@ -37,11 +37,12 @@ public class ReservationDialog extends JDialog {
 	private JSpinner fromDate;
 	private JSpinner toDate;
 	
-	Reservation reservation;
+	private Reservation reservation;
 	
 	/**
 	 * Foglalás dialógus konstruktora
 	 * @param parent Szülő frame
+	 * @param reservation Opcionális foglalás (null is lehet, ha a foglalást éppen hozzáadjuk)
 	 */
 	public ReservationDialog(JFrame parent, Reservation reservation) {
 		super(parent, reservation == null ? "Add reservation" : "Edit reservation", true);
