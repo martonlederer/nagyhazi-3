@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -136,6 +137,19 @@ public class Hotel {
 	}
 	
 	/**
+	 * Segédfunkció foglalt szobák filterezéséhez
+	 * @param date Megadott dátum, ami alapján válogat a funkció
+	 * @return Foglalt szobák stream
+	 */
+	private Stream<Reservation> streamTakenRooms(LocalDate date) {
+		return reservations.stream()
+			.filter(
+				(reservation) -> date.isAfter(reservation.getCheckinDate()) &&
+					date.isBefore(reservation.getCheckoutDate())
+			);
+	}
+	
+	/**
 	 * Hány elérhető szoba van egy adott napon
 	 * @param room Szobatípus (ha null, akkor minden szobát néz a rendszer)
 	 * @param date A megadott nap
@@ -146,12 +160,8 @@ public class Hotel {
 			.map(Room::getCount)
 			.reduce(0, (sum, curr) -> sum + curr);
 
-		long takenRooms = reservations.stream()
-			.filter(
-				(reservation) -> (reservation.getRoom() == room || room == null) && 
-					date.isAfter(reservation.getCheckinDate()) &&
-					date.isBefore(reservation.getCheckoutDate())
-			)
+		long takenRooms = streamTakenRooms(date)
+			.filter((reservation) -> (reservation.getRoom() == room || room == null))
 			.count();
 		
 		return roomCount - (int) takenRooms;
@@ -262,11 +272,6 @@ public class Hotel {
 	 * @return Lefoglalt szobák
 	 */
 	public List<Reservation> getReservationsForDay(LocalDate date) {
-		return reservations.stream()
-			.filter(
-				(reservation) -> date.isAfter(reservation.getCheckinDate()) &&
-					date.isBefore(reservation.getCheckoutDate())
-			)
-			.toList();
+		return streamTakenRooms(date).toList();
 	}
 }
