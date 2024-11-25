@@ -102,6 +102,11 @@ class HotelTest {
 	}
 	
 	@Test
+	void testTotalRoomCount() {
+		assertEquals(4, hotel.getTotalRoomCount());
+	}
+	
+	@Test
 	void testAvailableRoomsOf() throws NoAvailableRoomsException {
 		Reservation res = new Reservation(
 			new Customer("John Doe", "test@test.com", "+3614556789"),

@@ -26,6 +26,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import hu.martonlederer.hotel.Hotel;
+import hu.martonlederer.hotel.Room;
 
 public class MainFrame extends JFrame {
 	private CalendarModel data;
@@ -81,8 +82,22 @@ public class MainFrame extends JFrame {
                 setHorizontalAlignment(SwingConstants.RIGHT);
                 setVerticalAlignment(SwingConstants.BOTTOM);
 
-                //setBackground(new Color(255, 255, 204));
+                // set the color according to the availability
+                String day = (String) value;
+                Color color = Color.WHITE;
 
+                if (day != "" && hotel != null) {
+	                LocalDate dateInCell = data.getStartDate().withDayOfMonth(Integer.parseInt(day));
+	                double availability = (double) hotel.getAvailability(null, dateInCell) / hotel.getTotalRoomCount();
+	                	                
+	                if (availability < 0.25) color = new Color(0xff6e6e);
+	                else if (availability < 0.5) color = new Color(0xff974d);
+	                else if (availability < 0.75) color = new Color(0xf9fc88);
+	                else color = new Color(0x66ff8f);
+                }
+                
+                setBackground(color);
+                
                 return component;
             }
         });
@@ -132,6 +147,7 @@ public class MainFrame extends JFrame {
 	 */
 	public void setHotel(Hotel hotel) {
 		this.hotel = hotel;
+		data.fireTableDataChanged();
 	}
 	
 	/**
@@ -141,7 +157,7 @@ public class MainFrame extends JFrame {
     	HotelDialog dialog = new HotelDialog(this, hotel);
 		dialog.setVisible(true);
 		
-		hotel = dialog.getHotel();
+		setHotel(dialog.getHotel());
 		
 		try {
 			Hotel.save(hotel);

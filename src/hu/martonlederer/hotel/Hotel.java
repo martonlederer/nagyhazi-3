@@ -150,15 +150,23 @@ public class Hotel {
 	}
 	
 	/**
+	 * Hány szoba van összesen a hotelben
+	 * @return Szobaszám
+	 */
+	public int getTotalRoomCount() {
+		return rooms.stream()
+			.map(Room::getCount)
+			.reduce(0, (sum, curr) -> sum + curr);
+	}
+	
+	/**
 	 * Hány elérhető szoba van egy adott napon
 	 * @param room Szobatípus (ha null, akkor minden szobát néz a rendszer)
 	 * @param date A megadott nap
 	 * @return Elérhető szobák száma
 	 */
 	public int getAvailability(Room room, LocalDate date) {
-		int roomCount = room != null ? room.getCount() : rooms.stream()
-			.map(Room::getCount)
-			.reduce(0, (sum, curr) -> sum + curr);
+		int roomCount = room != null ? room.getCount() : getTotalRoomCount();
 
 		long takenRooms = streamTakenRooms(date)
 			.filter((reservation) -> (reservation.getRoom() == room || room == null))
