@@ -11,7 +11,7 @@ public class Main {
 		frame.setVisible(true);
 		
 		// controller
-		Hotel hotel;
+		Hotel hotel = null;
 		
 		// check for saved data
 		if (!Hotel.hasSavedData()) {
@@ -19,6 +19,12 @@ public class Main {
 			dialog.setVisible(true);
 			
 			hotel = dialog.getHotel();
+
+			try {
+				Hotel.save(hotel);
+			} catch (IOException e) {
+				System.out.println("Failed to save hotel file");
+			}
 		} else {
 			try {
 				hotel = Hotel.load();
@@ -28,6 +34,7 @@ public class Main {
 			}
 		}
 		
-		
+		// update hotel
+		frame.setHotel(hotel);
 	}
 }

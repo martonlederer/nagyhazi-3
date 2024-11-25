@@ -8,6 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -22,8 +23,10 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import hu.martonlederer.hotel.ExtraService;
 import hu.martonlederer.hotel.Hotel;
 import hu.martonlederer.hotel.HotelRating;
+import hu.martonlederer.hotel.Room;
 
 public class HotelDialog extends JDialog {
 	private GridBagConstraints gbc;
@@ -195,14 +198,36 @@ public class HotelDialog extends JDialog {
 	 * Új hotel példányt készít az adatokból, majd bezárja a dialógust
 	 */
 	private void saveHotel() {
+		Set<Room> rooms = new HashSet<>();
+		Set<ExtraService> extras = new HashSet<>();
+		
+		// parse rooms
+		for (int i = 0; i < roomTableModel.getRowCount(); i++) {
+            rooms.add(new Room(
+            	(String) roomTableModel.getValueAt(i, 0),
+            	(Integer) roomTableModel.getValueAt(i, 1),
+            	(Integer) roomTableModel.getValueAt(i, 2),
+            	(Integer) roomTableModel.getValueAt(i, 4),
+            	List.of(((String) roomTableModel.getValueAt(i, 3)).split(", "))
+            ));
+        }
+		
+		// parse extras
+		for (int i = 0; i < extrasTableModel.getRowCount(); i++) {
+			extras.add(new ExtraService(
+				(String) extrasTableModel.getValueAt(i, 0),
+				(Integer) extrasTableModel.getValueAt(i, 1)
+			));
+		}
+		
+		// parse the rest and create the hotel
 		hotel = new Hotel(
 			nameField.getText(),
         	descriptionField.getText(),
         	HotelRating.fromStars((String) rating.getSelectedItem()),
        		locationField.getText(),
-       		// TODO
-        	Set.of(),
-        	Set.of(),
+       		rooms,
+        	extras,
        		hotel != null ? hotel.getCustomers() : Set.of(),
             hotel != null ? hotel.getReservations() : List.of()
         );

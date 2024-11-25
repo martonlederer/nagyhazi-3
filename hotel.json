@@ -1,0 +1,25 @@
+{
+  "name": "Tihany hotel",
+  "description": "Ez egy pelda leiras modositva",
+  "rating": "Excellent",
+  "location": "Tihany",
+  "rooms": [
+    {
+      "name": "Szoba",
+      "price": 50000,
+      "capacity": 2,
+      "count": 100,
+      "facilities": [
+        "Légkondi"
+      ]
+    }
+  ],
+  "extras": [
+    {
+      "name": "Extra",
+      "price": 8000
+    }
+  ],
+  "customers": [],
+  "reservations": []
+}

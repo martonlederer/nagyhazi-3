@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 
@@ -24,8 +25,11 @@ import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import hu.martonlederer.hotel.Hotel;
+
 public class MainFrame extends JFrame {
 	private CalendarModel data;
+	private Hotel hotel;
 	
 	// global components
 	JLabel dateLabel;
@@ -44,6 +48,7 @@ public class MainFrame extends JFrame {
 		data = new CalendarModel(
 			LocalDate.now().with(TemporalAdjusters.firstDayOfMonth())
 		);
+		hotel = null;
 		
 		// adjuk hozzá az elemeket
 		initComponents();
@@ -107,9 +112,7 @@ public class MainFrame extends JFrame {
 
         prev.addActionListener(new DateNavBtnListener(-1));
         next.addActionListener(new DateNavBtnListener(1));
-        editHotelBtn.addActionListener((e) -> {
-        	
-        });
+        editHotelBtn.addActionListener((e) -> editHotel());
         addBtn.addActionListener((e) -> {
         	ReservationDialog dialog = new ReservationDialog(this, null);
         	dialog.setVisible(true);
@@ -122,6 +125,30 @@ public class MainFrame extends JFrame {
         nav.add(addBtn);
         add(nav, BorderLayout.SOUTH);
 	}
+	
+	/**
+	 * A hotel példány frissítése
+	 * @param hotel Új hotel példány
+	 */
+	public void setHotel(Hotel hotel) {
+		this.hotel = hotel;
+	}
+	
+	/**
+	 * A hotel szerkesztésének meghívása (előhozza a dialógust)
+	 */
+	private void editHotel() {
+    	HotelDialog dialog = new HotelDialog(this, hotel);
+		dialog.setVisible(true);
+		
+		hotel = dialog.getHotel();
+		
+		try {
+			Hotel.save(hotel);
+		} catch (IOException e) {
+			System.out.println("Failed to save hotel file");
+		}
+    }
 	
 	final class DateNavBtnListener implements ActionListener {	
 		private long val;
