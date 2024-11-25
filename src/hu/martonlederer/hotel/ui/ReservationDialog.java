@@ -126,6 +126,10 @@ public class ReservationDialog extends JDialog {
             @Override
             public void changedUpdate(DocumentEvent e) {}
         });
+		
+		existingCustomers.addActionListener((e) -> {
+			nameField.setText((String) existingCustomers.getSelectedItem());
+		});
 
 		namePanel.add(nameField);
 		namePanel.add(existingCustomers);
