@@ -17,17 +17,19 @@ import hu.martonlederer.hotel.Hotel.NoAvailableRoomsException;
 class HotelTest {
 	Hotel hotel;
 	Room room;
+	Room otherRoom;
 
 	@BeforeEach
 	void setup() throws IOException {
 		Hotel.savePath = "test_hotel.json";
 		room = new Room("Duplex", 1000, 2, 2, List.of());
+		otherRoom = new Room("Another", 10000, 2, 2, List.of());
 		hotel = new Hotel(
 			"Tihany Hotel",
 			"Ez egy példa hotel, ami Tihanyban van",
 			HotelRating.Comfortable,
 			"8236 Tihany, Rév utca 2.",
-			Set.of(room, new Room("Another", 10000, 2, 2, List.of())),
+			Set.of(room, otherRoom),
 			Set.of()
 		);
 		
@@ -164,5 +166,39 @@ class HotelTest {
 		assertTrue(hotel.getDescription().equals(other.getDescription()));
 		assertTrue(hotel.getDescription().equals(other.getDescription()));
 		assertEquals(hotel.getRating(), other.getRating());
+	}
+	
+	@Test
+	void testReservationsForDay() throws NoAvailableRoomsException {
+		Reservation res1 = new Reservation(
+			new Customer("John Doe", "test@test.com", "+3614556789"),
+			room,
+			LocalDate.parse("2024-05-12"),
+			LocalDate.parse("2024-05-16"),
+			List.of()
+		);
+		Reservation res2 = new Reservation(
+			new Customer("Test Test", "test@test.com", "+3634556789"),
+			room,
+			LocalDate.parse("2024-05-14"),
+			LocalDate.parse("2024-05-16"),
+			List.of()
+		);
+		hotel.addReservation(res1);
+		hotel.addReservation(res2);
+		
+		hotel.addReservation(new Reservation(
+			new Customer("Other Test", "test@test.hu", "+35408931266"),
+			otherRoom,
+			LocalDate.parse("2024-05-16"),
+			LocalDate.parse("2024-05-19"),
+			List.of()
+		));
+		
+		List<Reservation> reservationsForDay = hotel.getReservationsForDay(LocalDate.parse("2024-05-15"));
+		
+		assertEquals(2, reservationsForDay.size());
+		assertTrue(reservationsForDay.contains(res1));
+		assertTrue(reservationsForDay.contains(res2));
 	}
 }

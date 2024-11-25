@@ -255,4 +255,18 @@ public class Hotel {
 	public List<Reservation> getReservations() {
 		return reservations;
 	}
+	
+	/**
+	 * Foglalt szobák listázása egy adott napra
+	 * @param date Megadott nap, amire a lefoglalt szobákat listázzuk
+	 * @return Lefoglalt szobák
+	 */
+	public List<Reservation> getReservationsForDay(LocalDate date) {
+		return reservations.stream()
+			.filter(
+				(reservation) -> date.isAfter(reservation.getCheckinDate()) &&
+					date.isBefore(reservation.getCheckoutDate())
+			)
+			.toList();
+	}
 }
