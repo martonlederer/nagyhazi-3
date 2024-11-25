@@ -50,6 +50,7 @@ public class MainFrame extends JFrame {
         JTable calendar = new JTable(data);
         JScrollPane scrollPane = new JScrollPane(calendar);
         calendar.setFillsViewportHeight(true);
+        calendar.getTableHeader().setReorderingAllowed(false);
         add(scrollPane, BorderLayout.CENTER);
 
         // navigáció
