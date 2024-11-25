@@ -67,4 +67,12 @@ public class Room {
 	public int getCount() {
 		return count;
 	}
+	
+	/**
+	 * Szoba felszereltségének lekérdezése
+	 * @return Felszereltség a szobához
+	 */
+	public List<String> getFacilities() {
+		return facilities;
+	}
 }

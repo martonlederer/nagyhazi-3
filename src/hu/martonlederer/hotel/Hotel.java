@@ -267,6 +267,30 @@ public class Hotel {
 	}
 	
 	/**
+	 * Ügyfelek lekérdezése
+	 * @return Ügyfelek a hotelhez
+	 */
+	public Set<Customer> getCustomers() {
+		return customers;
+	}
+	
+	/**
+	 * Szobák lekérdezése
+	 * @return Összes szoba kategória
+	 */
+	public Set<Room> getRooms() {
+		return rooms;
+	}
+	
+	/**
+	 * Extra szolgáltatások lekérdezése
+	 * @return Extrák a hotelhez
+	 */
+	public Set<ExtraService> getExtras() {
+		return extras;
+	}
+	
+	/**
 	 * Foglalt szobák listázása egy adott napra
 	 * @param date Megadott nap, amire a lefoglalt szobákat listázzuk
 	 * @return Lefoglalt szobák

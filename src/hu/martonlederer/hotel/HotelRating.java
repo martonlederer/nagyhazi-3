@@ -25,4 +25,30 @@ public enum HotelRating {
 	public String getStars() {
 		return "☆".repeat(stars);
 	}
+	
+	/**
+	 * Csillagok visszaadása számban
+	 * @return Számmal való kifejezés
+	 */
+	public int getStarsCount() {
+		return stars;
+	}
+	
+	/**
+	 * Érték visszaadása csillagokból
+	 * @param stars Csillagok string
+	 * @return Enum értéke
+	 */
+	public static HotelRating fromStars(String stars) {
+		int starCount = (int) stars.chars()
+			.filter(ch -> ch == '☆')
+            .count();
+
+		for (HotelRating rating : HotelRating.values()) {
+            if (rating.stars == starCount)
+                return rating;
+        }
+
+        throw new IllegalArgumentException("No rating with " + stars + " stars found");
+	}
 }
