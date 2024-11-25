@@ -13,7 +13,6 @@ import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -24,10 +23,9 @@ import javax.swing.JComponent;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
 
 public class MainFrame extends JFrame {
-	private CalendarData data;
+	private CalendarModel data;
 	
 	// global components
 	JLabel dateLabel;
@@ -37,13 +35,13 @@ public class MainFrame extends JFrame {
 	 */
 	public MainFrame() {
 		// frame konfig
-		super("Hotel manager");
+		super("Reservations overview");
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		setSize(screenSize);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		// setup calendar
-		data = new CalendarData(
+		data = new CalendarModel(
 			LocalDate.now().with(TemporalAdjusters.firstDayOfMonth())
 		);
 		
@@ -106,8 +104,16 @@ public class MainFrame extends JFrame {
         JButton prev = new JButton("<");
         JButton next = new JButton(">");
         JButton addBtn = new JButton("+ Add");
+
         prev.addActionListener(new DateNavBtnListener(-1));
         next.addActionListener(new DateNavBtnListener(1));
+        editHotelBtn.addActionListener((e) -> {
+        	
+        });
+        addBtn.addActionListener((e) -> {
+        	ReservationDialog dialog = new ReservationDialog(this, null);
+        	dialog.setVisible(true);
+        });
         
         nav.add(editHotelBtn);
         nav.add(prev);

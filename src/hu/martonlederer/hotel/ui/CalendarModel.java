@@ -4,13 +4,13 @@ import java.time.LocalDate;
 
 import javax.swing.table.AbstractTableModel;
 
-public class CalendarData extends AbstractTableModel {
+public class CalendarModel extends AbstractTableModel {
 	public LocalDate startDate;
 	
 	private String[] days = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
 	private String[][] data = new String[6][7];
 	
-	public CalendarData(LocalDate startDate) {
+	public CalendarModel(LocalDate startDate) {
 		this.startDate = startDate;
 		calculateCalendar();
 	}
