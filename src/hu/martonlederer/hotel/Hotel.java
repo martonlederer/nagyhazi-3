@@ -1,10 +1,19 @@
 package hu.martonlederer.hotel;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class Hotel {
 	private String name;
@@ -152,5 +161,49 @@ public class Hotel {
 		
 		r.getCustomer().addPoints(-pointsToRemove);
 		reservations.remove(r);
+	}
+	
+	/**
+	 * Visszaadja, hogy van e elmentett hotel
+	 * adatfájl
+	 * @return Boolean ami jelzi, hogy létezik e
+	 * hotel fájl
+	 */
+	public static boolean hasSavedData() {
+		File file = new File("hotel.json");
+		
+		return file.exists();
+	}
+	
+	/**
+	 * Hotel adatainak mentése
+	 * @param hotel Az elmentendő hotel
+	 * @throws IOException
+	 */
+	public static void save(Hotel hotel) throws IOException {
+		// build json
+		Gson gson = new GsonBuilder()
+			.setPrettyPrinting()
+			.create();
+		String data = gson.toJson(hotel);
+		
+		// save json
+		BufferedWriter writer = new BufferedWriter(new FileWriter("hotel.json"));
+		
+		writer.write(data);
+	}
+	
+	/**
+	 * Hotel adatainak betöltése
+	 * @throws IOException 
+	 * @return A betöltött hotel
+	 */
+	public static Hotel load() throws IOException {
+		Gson gson = new Gson();
+		
+		// read json string
+		BufferedReader reader = new BufferedReader(new FileReader("hotel.json"));
+		
+		return gson.fromJson(reader, Hotel.class);
 	}
 }
