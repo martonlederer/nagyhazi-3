@@ -91,14 +91,10 @@ public class Hotel {
 		long takenRooms = reservations.stream()
 			.filter((reservation) -> {
 				// if the room is not of the given type, no checks are needed
-				if (reservation.getRoom().getName().equals(room.getName())) return false;
-
-				if (from.isBefore(reservation.getCheckinDate()))
-					return to.isBefore(reservation.getCheckoutDate()) || to.isEqual(reservation.getCheckoutDate());
-				if (to.isAfter(reservation.getCheckoutDate()))
-					return from.isAfter(reservation.getCheckinDate()) || from.isEqual(reservation.getCheckinDate());
+				if (reservation.getRoom() != room) return false;
 				
-				return false;
+				return !(to.isBefore(reservation.getCheckinDate().plusDays(1)) &&
+					from.isAfter(reservation.getCheckoutDate().minusDays(1)));
 			})
 			.count();
 		
@@ -114,7 +110,7 @@ public class Hotel {
 	public int getAvailability(Room room, LocalDate date) {
 		long takenRooms = reservations.stream()
 			.filter(
-				(reservation) -> reservation.getRoom().getName().equals(room.getName()) && 
+				(reservation) -> reservation.getRoom() == room && 
 					date.isAfter(reservation.getCheckinDate()) &&
 					date.isBefore(reservation.getCheckoutDate())
 			)
@@ -205,5 +201,13 @@ public class Hotel {
 		BufferedReader reader = new BufferedReader(new FileReader("hotel.json"));
 		
 		return gson.fromJson(reader, Hotel.class);
+	}
+	
+	/**
+	 * Foglalások lekérdezése
+	 * @return Foglalások a hotelhez
+	 */
+	public List<Reservation> getReservations() {
+		return reservations;
 	}
 }
