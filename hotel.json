@@ -25,19 +25,19 @@
       "name": "Test test",
       "email": "test@test.com",
       "phoneNumber": "+36307361480",
-      "points": 10
+      "points": 12
     },
     {
       "name": "fdfd",
       "email": "fdfdf",
       "phoneNumber": "fdfsdfsfsdfds",
-      "points": 1
+      "points": 4
     },
     {
       "name": "",
       "email": "",
       "phoneNumber": "",
-      "points": 8
+      "points": 12
     }
   ],
   "reservations": [
@@ -144,6 +144,66 @@
       },
       "from": "2024-11-26",
       "to": "2024-11-28",
+      "extras": []
+    },
+    {
+      "customer": {
+        "name": "Test test",
+        "email": "test@test.com",
+        "phoneNumber": "+36307361480",
+        "points": 12
+      },
+      "room": {
+        "name": "Szoba",
+        "price": 50000,
+        "capacity": 2,
+        "count": 4,
+        "facilities": [
+          "Légkondi"
+        ]
+      },
+      "from": "2024-11-26",
+      "to": "2024-11-28",
+      "extras": []
+    },
+    {
+      "customer": {
+        "name": "fdfd",
+        "email": "fdfdf",
+        "phoneNumber": "fdfsdfsfsdfds",
+        "points": 4
+      },
+      "room": {
+        "name": "Szoba",
+        "price": 50000,
+        "capacity": 2,
+        "count": 4,
+        "facilities": [
+          "Légkondi"
+        ]
+      },
+      "from": "2024-11-26",
+      "to": "2024-11-29",
+      "extras": []
+    },
+    {
+      "customer": {
+        "name": "",
+        "email": "",
+        "phoneNumber": "",
+        "points": 12
+      },
+      "room": {
+        "name": "Szoba",
+        "price": 50000,
+        "capacity": 2,
+        "count": 4,
+        "facilities": [
+          "Légkondi"
+        ]
+      },
+      "from": "2024-11-26",
+      "to": "2024-11-30",
       "extras": []
     }
   ]

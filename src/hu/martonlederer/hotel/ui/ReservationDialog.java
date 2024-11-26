@@ -122,10 +122,7 @@ public class ReservationDialog extends JDialog {
 				.map(Customer::getName)
 				.toArray(String[]::new)
 		);
-		
-		if (customer != null) {
-			existingCustomers.setSelectedItem(customer.getName());
-		}
+		existingCustomers.setSelectedItem(customer != null ? customer.getName() : "");
 		
 		nameField = new JTextField(customer != null ? customer.getName() : null);
 		nameField.setPreferredSize(new Dimension(200, 25));
@@ -145,7 +142,12 @@ public class ReservationDialog extends JDialog {
         });
 		
 		existingCustomers.addActionListener((e) -> {
-			nameField.setText((String) existingCustomers.getSelectedItem());
+			String selected = (String) existingCustomers.getSelectedItem();
+			Customer selectedCustomer = !selected.equals("") ? hotel.findCustomerByName(selected) : null;
+			
+			nameField.setText(selectedCustomer != null ? selectedCustomer.getName() : "");
+			emailField.setText(selectedCustomer != null ? selectedCustomer.getEmail() : "");
+			phoneNumberField.setText(selectedCustomer != null ? selectedCustomer.getPhoneNumber() : "");
 		});
 
 		namePanel.add(nameField);
