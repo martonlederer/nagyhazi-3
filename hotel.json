@@ -25,13 +25,13 @@
       "name": "Test test",
       "email": "test@test.com",
       "phoneNumber": "+36307361480",
-      "points": 22
+      "points": 28
     },
     {
       "name": "fdfd",
       "email": "fdfdf",
       "phoneNumber": "fdfsdfsfsdfds",
-      "points": 8
+      "points": 11
     },
     {
       "name": "",
@@ -84,6 +84,86 @@
       },
       "from": "2024-11-25",
       "to": "2024-11-26",
+      "extras": []
+    },
+    {
+      "customer": {
+        "name": "Test test",
+        "email": "test@test.com",
+        "phoneNumber": "+36307361480",
+        "points": 28
+      },
+      "room": {
+        "name": "Szoba",
+        "price": 50000,
+        "capacity": 2,
+        "count": 4,
+        "facilities": [
+          "Légkondi"
+        ]
+      },
+      "from": "2024-11-27",
+      "to": "2024-11-30",
+      "extras": []
+    },
+    {
+      "customer": {
+        "name": "fdfd",
+        "email": "fdfdf",
+        "phoneNumber": "fdfsdfsfsdfds",
+        "points": 11
+      },
+      "room": {
+        "name": "Szoba",
+        "price": 50000,
+        "capacity": 2,
+        "count": 4,
+        "facilities": [
+          "Légkondi"
+        ]
+      },
+      "from": "2024-11-27",
+      "to": "2024-11-30",
+      "extras": []
+    },
+    {
+      "customer": {
+        "name": "fdfd",
+        "email": "fdfdf",
+        "phoneNumber": "fdfsdfsfsdfds",
+        "points": 11
+      },
+      "room": {
+        "name": "Szoba",
+        "price": 50000,
+        "capacity": 2,
+        "count": 4,
+        "facilities": [
+          "Légkondi"
+        ]
+      },
+      "from": "2024-11-27",
+      "to": "2024-11-30",
+      "extras": []
+    },
+    {
+      "customer": {
+        "name": "Test test",
+        "email": "test@test.com",
+        "phoneNumber": "+36307361480",
+        "points": 28
+      },
+      "room": {
+        "name": "Szoba",
+        "price": 50000,
+        "capacity": 2,
+        "count": 4,
+        "facilities": [
+          "Légkondi"
+        ]
+      },
+      "from": "2024-11-27",
+      "to": "2024-11-30",
       "extras": []
     }
   ]
