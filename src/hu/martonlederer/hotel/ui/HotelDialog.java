@@ -103,7 +103,19 @@ public class HotelDialog extends JDialog {
         addWithLabel("Rating:", rating);
         addWithLabel("Location:", locationField);
         
-        roomTableModel = new DefaultTableModel(new Object[]{ "Category", "Price", "Capacity", "Features", "Count" }, 0);
+        roomTableModel = new DefaultTableModel(new Object[]{ "Category", "Price", "Capacity", "Features", "Count" }, 0) {
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                switch (columnIndex) {
+                    case 0:
+                    case 3: return String.class;
+                    case 1:
+                    case 2:
+                    case 4: return Integer.class;
+                    default: return Object.class;
+                }
+            }
+        };
         roomTable = new JTable(roomTableModel);
         populateRoomTable();
 
@@ -117,7 +129,13 @@ public class HotelDialog extends JDialog {
         formPanel.add(addRoomBtn, gbc);
         gbc.gridy++;
 
-        extrasTableModel = new DefaultTableModel(new Object[]{ "Name", "Price" }, 0);
+        extrasTableModel = new DefaultTableModel(new Object[]{ "Name", "Price" }, 0) {
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                if (columnIndex == 1) return Integer.class;
+                return String.class;
+            }
+        };
         extrasTable = new JTable(extrasTableModel);
         populateExtrasTable();
 
