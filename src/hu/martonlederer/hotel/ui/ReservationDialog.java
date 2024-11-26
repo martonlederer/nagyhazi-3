@@ -245,18 +245,19 @@ public class ReservationDialog extends JDialog {
 		
 		JPanel btnsPanel = new JPanel(new BorderLayout());
 		
+		JButton saveBtn = new JButton("Save");
+		saveBtn.addActionListener((e) -> save());
+		btnsPanel.add(saveBtn, BorderLayout.NORTH);
+		
 		if (reservation != null && reservation.getCheckinDate().isAfter(LocalDate.now())) {
 			JButton deleteBtn = new JButton("Delete");
 			deleteBtn.addActionListener((e) -> {
 				hotel.removeReservation(reservation);
+				reservation = null;
 				dispose();
 			});
-			btnsPanel.add(deleteBtn, BorderLayout.NORTH);
+			btnsPanel.add(deleteBtn, BorderLayout.SOUTH);
 		}
-
-		JButton saveBtn = new JButton("Save");
-		saveBtn.addActionListener((e) -> save());
-		btnsPanel.add(saveBtn, BorderLayout.SOUTH);
 		
 		add(btnsPanel, BorderLayout.SOUTH);
 		updateTotalPrice();
@@ -296,7 +297,7 @@ public class ReservationDialog extends JDialog {
 	 * Visszaadja a foglalást az aktuális adatok alapján
 	 * @return A generált foglalás
 	 */
-	private Reservation getReservation() {
+	private Reservation generateReservation() {
 		Room room = null;
 		
 		for (Room r : hotel.getRooms())
@@ -328,7 +329,7 @@ public class ReservationDialog extends JDialog {
 	 * Frissíti a teljes árat
 	 */
 	private void updateTotalPrice() {
-		Reservation predicted = getReservation();
+		Reservation predicted = generateReservation();
 		
 		if (predicted == null) return;
 
@@ -343,7 +344,7 @@ public class ReservationDialog extends JDialog {
 	 * Elmenti a foglalást és bezárja a dialógust
 	 */
 	public void save() {
-		Reservation newReservation = getReservation();
+		Reservation newReservation = generateReservation();
 		
 		if (!newReservation.getCheckinDate().isBefore(newReservation.getCheckoutDate())) {
 			JOptionPane.showMessageDialog(
@@ -358,6 +359,7 @@ public class ReservationDialog extends JDialog {
 		if (reservation != null) {
 			hotel.removeReservation(reservation);
 		}
+		reservation = newReservation;
 		
 		try {
 			hotel.addReservation(newReservation);
@@ -370,5 +372,14 @@ public class ReservationDialog extends JDialog {
 		        JOptionPane.ERROR_MESSAGE
 		    );
 		}
+	}
+	
+	/**
+	 * Visszaadja az aktuális foglalást (a frissített verzióját
+	 * ha már megtörtént a mentés)
+	 * @return A foglalás
+	 */
+	public Reservation getReservation() {
+		return reservation;
 	}
 }

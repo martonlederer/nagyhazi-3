@@ -83,24 +83,35 @@ public class DayReservationList extends JDialog {
 	private void addReservationsToUi(JPanel reservationsPanel) {
 		for (Reservation reservation : hotel.getReservationsForDay(date)) {
 			JPanel reservationWrapper = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-		    JButton reservationBtn = new JButton(
-		    	reservation.getCustomer().getName() +
-		    	" (" +
-		    	reservation.getCheckinDate().toString() +
-		    	" - " +
-		    	reservation.getCheckoutDate().toString() +
-		    	")"
-		    );
+		    JButton reservationBtn = new JButton(getReservationTitle(reservation));
 		    JButton deleteBtn = new JButton("x");
 		    
 		    reservationBtn.setHorizontalAlignment(SwingConstants.LEFT);
 		
 		    reservationBtn.addActionListener((e) -> {
-		    	// TODO
-		    	// TODO: remove if checkin date changed
-		    	reservationsPanel.remove(reservationWrapper);
-		    	reservationsPanel.revalidate();
-		    	reservationsPanel.repaint();
+		    	JFrame parent = (JFrame) this.getOwner();
+		    	ReservationDialog dialog = new ReservationDialog(parent, reservation, hotel);
+	        	dialog.setVisible(true);
+	        	
+	        	// get updated reservation
+	        	Reservation updatedReservation = dialog.getReservation();
+	        	
+	        	if (updatedReservation != null) {
+	        		reservationBtn.setText(getReservationTitle(updatedReservation));
+	        	}
+	        	
+	        	try {
+					Hotel.save(hotel);
+				} catch (IOException e1) {
+					System.out.println("Failed to save hotel file");
+				}
+		    	
+	        	// remove reservation if not on this day
+	        	if (updatedReservation == null || updatedReservation.getCheckinDate().isAfter(date) || updatedReservation.getCheckoutDate().isBefore(date)) {
+			    	reservationsPanel.remove(reservationWrapper);
+			    	reservationsPanel.revalidate();
+			    	reservationsPanel.repaint();
+	        	}
 		    });
 		    deleteBtn.addActionListener((e) -> {
 		    	int response = JOptionPane.showConfirmDialog(
@@ -128,5 +139,19 @@ public class DayReservationList extends JDialog {
 
 		    reservationsPanel.add(reservationWrapper);
 		}
+	}
+	
+	/**
+	 * Visszaadja a foglalás gomb szövegét
+	 * @param r A foglalás
+	 * @return A szöveg amit a gombon kell mutatni
+	 */
+	private String getReservationTitle(Reservation r) {
+		return r.getCustomer().getName() +
+		    " (" +
+		    r.getCheckinDate().toString() +
+		    " - " +
+		    r.getCheckoutDate().toString() +
+		    ")";
 	}
 }
