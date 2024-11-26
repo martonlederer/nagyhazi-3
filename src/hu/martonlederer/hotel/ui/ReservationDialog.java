@@ -313,7 +313,10 @@ public class ReservationDialog extends JDialog {
 		
 		if (predicted == null) return;
 
-		priceSumLabel.setText("Summary: HUF" + Integer.toString(predicted.getTotalPrice()));
+		priceSumLabel.setText(
+			"Summary: HUF" + Integer.toString(predicted.getTotalPrice()) +
+			" (" + Integer.toString(predicted.getDiscountedNights()) + " free nights for points)"
+		);
 		pointsEarnedLabel.setText("Points earned: " + Long.toString(predicted.getNightsCount()));
 	}
 	

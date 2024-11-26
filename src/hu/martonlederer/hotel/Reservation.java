@@ -46,7 +46,7 @@ public class Reservation {
 	 */
 	public int getTotalPrice() {
 		// discounted price after points
-		int freeNights = Math.floorDiv(customer.getPoints(), 10);
+		int freeNights = getDiscountedNights();
 
 		// price for nights
 		int price = ((int) getNightsCount() - freeNights) * room.getPrice();
@@ -57,6 +57,25 @@ public class Reservation {
 			.reduce(0, (sum, curr) -> sum + curr);
 		
 		return price;
+	}
+	
+	/**
+	 * Ingyenes éjszakák egy foglalásra
+	 * (minden 10. pont után egy ingyen éjszaka)
+	 * @return Maximum ingyen éjszakák száma ehhez az ügyfélhez
+	 */
+	public int getDiscountedNights() {
+		int freeNights = Math.floorDiv(customer.getPoints(), 10);
+		
+		// if the user can get more free nights
+		// than the reservation nights count
+		// they're only allowed to get
+		// totalNights - 1 free nights
+		if (freeNights >= (int) getNightsCount()) {
+			freeNights = (int) getNightsCount() - 1;
+		}
+
+		return freeNights;
 	}
 	
 	/**
