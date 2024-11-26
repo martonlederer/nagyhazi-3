@@ -167,7 +167,7 @@ public class Hotel {
 	 */
 	public int getAvailability(Room room, LocalDate date) {
 		int roomCount = room != null ? room.getCount() : getTotalRoomCount();
-
+		
 		long takenRooms = streamTakenRooms(date)
 			.filter((reservation) -> (reservation.getRoom() == room || room == null))
 			.count();

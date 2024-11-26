@@ -89,11 +89,19 @@ public class MainFrame extends JFrame {
                 if (day != "" && hotel != null) {
 	                LocalDate dateInCell = data.getStartDate().withDayOfMonth(Integer.parseInt(day));
 	                double availability = (double) hotel.getAvailability(null, dateInCell) / hotel.getTotalRoomCount();
-	                	                
-	                if (availability < 0.25) color = new Color(0xff6e6e);
-	                else if (availability < 0.5) color = new Color(0xff974d);
-	                else if (availability < 0.75) color = new Color(0xf9fc88);
-	                else color = new Color(0x66ff8f);
+
+	                if (!dateInCell.isBefore(LocalDate.now())) {
+		                if (availability < 0.25) color = new Color(0xff6e6e);
+		                else if (availability < 0.5) color = new Color(0xff974d);
+		                else if (availability < 0.75) color = new Color(0xf9fc88);
+		                else color = new Color(0x66ff8f);
+	                }
+	                
+	                setForeground(dateInCell.isBefore(LocalDate.now()) ? Color.GRAY : Color.BLACK);
+	                
+	                if (dateInCell.isEqual(LocalDate.now())) {
+	                	setBorder(new LineBorder(new Color(0xff9494), 4));
+	                }
                 }
                 
                 setBackground(color);

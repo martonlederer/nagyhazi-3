@@ -44,8 +44,12 @@ public class Reservation {
 	 * Foglalás teljes árának lekérdezése (extrákkal együtt)
 	 * @return A foglalás teljes ára
 	 */
-	public int getTotalPrice() {		
-		int price = (int) getNightsCount() * room.getPrice();
+	public int getTotalPrice() {
+		// discounted price after points
+		int freeNights = Math.floorDiv(customer.getPoints(), 10);
+
+		// price for nights
+		int price = ((int) getNightsCount() - freeNights) * room.getPrice();
 		
 		// add prices for extras
 		price += extras.stream()
