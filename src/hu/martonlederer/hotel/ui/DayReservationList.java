@@ -2,16 +2,22 @@ package hu.martonlederer.hotel.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
 import java.io.IOException;
 import java.time.LocalDate;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
 
 import hu.martonlederer.hotel.Hotel;
+import hu.martonlederer.hotel.Reservation;
 
 public class DayReservationList extends JDialog {
 	private LocalDate date;
@@ -40,8 +46,14 @@ public class DayReservationList extends JDialog {
 	public void initComponents() {
 		setLayout(new BorderLayout());
 		
-		formPanel = new JPanel();
-        formPanel.setLayout(new GridBagLayout());
+		JPanel reservationsPanel = new JPanel();
+		reservationsPanel.setLayout(new BoxLayout(reservationsPanel, BoxLayout.Y_AXIS));
+
+		JScrollPane scrollPane = new JScrollPane(reservationsPanel);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		add(scrollPane, BorderLayout.CENTER);
+		
+		addReservationsToUi(reservationsPanel);
         
         JButton addBtn = new JButton("+ Add");
         addBtn.addActionListener((e) -> {
@@ -49,15 +61,72 @@ public class DayReservationList extends JDialog {
         	ReservationDialog reservationForm = new ReservationDialog(parent, null, hotel, date);
         	
         	reservationForm.setVisible(true);
+        	reservationsPanel.removeAll();
+        	reservationsPanel.revalidate();
+	    	reservationsPanel.repaint();
+        	addReservationsToUi(reservationsPanel);
         	
         	try {
 				Hotel.save(hotel);
-			} catch (IOException e1) {
+			} catch (IOException err) {
 				System.out.println("Failed to save hotel file");
 			}
         });
         
-        
         add(addBtn, BorderLayout.SOUTH);
+	}
+	
+	/**
+	 * Foglalások betöltése a UI-ba
+	 * @param reservationsPanel A JPanel, ahová betöltjük a foglalásokat
+	 */
+	private void addReservationsToUi(JPanel reservationsPanel) {
+		for (Reservation reservation : hotel.getReservationsForDay(date)) {
+			JPanel reservationWrapper = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+		    JButton reservationBtn = new JButton(
+		    	reservation.getCustomer().getName() +
+		    	" (" +
+		    	reservation.getCheckinDate().toString() +
+		    	" - " +
+		    	reservation.getCheckoutDate().toString() +
+		    	")"
+		    );
+		    JButton deleteBtn = new JButton("x");
+		    
+		    reservationBtn.setHorizontalAlignment(SwingConstants.LEFT);
+		
+		    reservationBtn.addActionListener((e) -> {
+		    	// TODO
+		    	// TODO: remove if checkin date changed
+		    	reservationsPanel.remove(reservationWrapper);
+		    	reservationsPanel.revalidate();
+		    	reservationsPanel.repaint();
+		    });
+		    deleteBtn.addActionListener((e) -> {
+		    	int response = JOptionPane.showConfirmDialog(
+		    		null,
+		    		"Are you sure you want to delete this reservation?",
+		    		"Delete reservation",
+		    		JOptionPane.YES_NO_OPTION
+		    	);
+		    	
+		    	if (response != JOptionPane.YES_OPTION) return;
+		    	hotel.removeReservation(reservation);
+		    	reservationsPanel.remove(reservationWrapper);
+		    	reservationsPanel.revalidate();
+		    	reservationsPanel.repaint();
+		    	
+		    	try {
+					Hotel.save(hotel);
+				} catch (IOException err) {
+					System.out.println("Failed to save hotel file");
+				}
+		    });
+		    
+		    reservationWrapper.add(reservationBtn, BorderLayout.CENTER);
+		    reservationWrapper.add(deleteBtn, BorderLayout.EAST);
+
+		    reservationsPanel.add(reservationWrapper);
+		}
 	}
 }

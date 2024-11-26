@@ -144,8 +144,8 @@ public class Hotel {
 	private Stream<Reservation> streamTakenRooms(LocalDate date) {
 		return reservations.stream()
 			.filter(
-				(reservation) -> date.isAfter(reservation.getCheckinDate()) &&
-					date.isBefore(reservation.getCheckoutDate())
+				(reservation) -> date.isAfter(reservation.getCheckinDate().minusDays(1)) &&
+					date.isBefore(reservation.getCheckoutDate().plusDays(1))
 			);
 	}
 	
@@ -169,7 +169,11 @@ public class Hotel {
 		int roomCount = room != null ? room.getCount() : getTotalRoomCount();
 		
 		long takenRooms = streamTakenRooms(date)
-			.filter((reservation) -> (reservation.getRoom() == room || room == null))
+			.filter((reservation) ->
+				(reservation.getRoom() == room || room == null) &&
+				!date.isEqual(reservation.getCheckinDate()) &&
+				!date.isEqual(reservation.getCheckoutDate())
+			)
 			.count();
 		
 		return roomCount - (int) takenRooms;

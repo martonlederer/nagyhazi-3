@@ -185,7 +185,7 @@ class HotelTest {
 		Reservation res2 = new Reservation(
 			new Customer("Test Test", "test@test.com", "+3634556789"),
 			room,
-			LocalDate.parse("2024-05-14"),
+			LocalDate.parse("2024-05-15"),
 			LocalDate.parse("2024-05-16"),
 			List.of()
 		);
