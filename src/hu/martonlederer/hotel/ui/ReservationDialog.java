@@ -57,12 +57,29 @@ public class ReservationDialog extends JDialog {
 	private Reservation reservation;
 	private Hotel hotel;
 	
-	private List<ExtraService> addedExtras;
+	private List<ExtraService> addedExtras;	
+	
+	/**
+	 * Foglalás dialógus egy adott napra konstruktor
+	 * @param parent Szülő frame
+	 * @param reservation Opcionális foglalás (null is lehet, ha a foglalást éppen hozzáadjuk)
+	 * @param hotel Hotel példány
+	 * @param from A megadott nap
+	 */
+	public ReservationDialog(JFrame parent, Reservation reservation, Hotel hotel, LocalDate from) {
+		this(parent, reservation, hotel);
+		
+		// update dates
+		toDate.setValue(getDate(from.plusDays(1)));
+		fromDate.setValue(getDate(from));
+		updateTotalPrice();
+	}
 	
 	/**
 	 * Foglalás dialógus konstruktora
 	 * @param parent Szülő frame
 	 * @param reservation Opcionális foglalás (null is lehet, ha a foglalást éppen hozzáadjuk)
+	 * @param hotel Hotel példány
 	 */
 	public ReservationDialog(JFrame parent, Reservation reservation, Hotel hotel) {
 		super(parent, reservation == null ? "Add reservation" : "Edit reservation", true);

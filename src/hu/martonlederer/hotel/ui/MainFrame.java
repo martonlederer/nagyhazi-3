@@ -116,8 +116,11 @@ public class MainFrame extends JFrame {
                 int column = calendar.columnAtPoint(e.getPoint());
 
                 if (row >= 0 && column >= 0) {
-                    Object cellValue = calendar.getValueAt(row, column);
-                    System.out.println(cellValue);
+                    String cellValue = (String) calendar.getValueAt(row, column);
+                    LocalDate dateInCell = data.getStartDate().withDayOfMonth(Integer.parseInt(cellValue));
+                    
+                    DayReservationList dialog = new DayReservationList(MainFrame.this, dateInCell, hotel);
+                    dialog.setVisible(true);
                 }
             }
         });
