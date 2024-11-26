@@ -57,6 +57,7 @@ public class DayReservationList extends JDialog {
 			}
         });
         
+        
         add(addBtn, BorderLayout.SOUTH);
 	}
 }

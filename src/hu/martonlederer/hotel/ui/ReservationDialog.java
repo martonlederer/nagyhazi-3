@@ -243,7 +243,7 @@ public class ReservationDialog extends JDialog {
 		
 		JPanel btnsPanel = new JPanel(new BorderLayout());
 		
-		if (reservation != null) {
+		if (reservation != null && reservation.getCheckinDate().isAfter(LocalDate.now())) {
 			JButton deleteBtn = new JButton("Delete");
 			deleteBtn.addActionListener((e) -> {
 				hotel.removeReservation(reservation);
@@ -342,6 +342,16 @@ public class ReservationDialog extends JDialog {
 	 */
 	public void save() {
 		Reservation newReservation = getReservation();
+		
+		if (!newReservation.getCheckinDate().isBefore(newReservation.getCheckoutDate())) {
+			JOptionPane.showMessageDialog(
+				this,
+				"Checkin date has to be before checkout date!",
+			    "Error",
+			    JOptionPane.ERROR_MESSAGE
+			);
+			return;
+		}
 		
 		if (reservation != null) {
 			hotel.removeReservation(reservation);
