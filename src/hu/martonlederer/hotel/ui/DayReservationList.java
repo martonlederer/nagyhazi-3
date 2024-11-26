@@ -39,7 +39,7 @@ public class DayReservationList extends JDialog {
 		setLocationRelativeTo(parent);
 		initComponents();
 	}
-	
+		
 	/**
 	 * Komponensek hozzáadása
 	 */

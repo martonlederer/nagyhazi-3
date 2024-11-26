@@ -134,10 +134,14 @@ public class MainFrame extends JFrame {
         dateLabel = new JLabel(data.getStartDate().toString());
         JButton prev = new JButton("<");
         JButton next = new JButton(">");
+        JButton prevYear = new JButton("<<");
+        JButton nextYear = new JButton(">>");
         JButton addBtn = new JButton("+ Add");
 
-        prev.addActionListener(new DateNavBtnListener(-1));
-        next.addActionListener(new DateNavBtnListener(1));
+        prev.addActionListener(new DateNavBtnListener(-1, NavBtnUnit.MONTH));
+        next.addActionListener(new DateNavBtnListener(1, NavBtnUnit.MONTH));
+        prevYear.addActionListener(new DateNavBtnListener(-1, NavBtnUnit.YEAR));
+        nextYear.addActionListener(new DateNavBtnListener(1, NavBtnUnit.YEAR));
         editHotelBtn.addActionListener((e) -> editHotel());
         addBtn.addActionListener((e) -> {
         	ReservationDialog dialog = new ReservationDialog(this, null, hotel);
@@ -151,9 +155,11 @@ public class MainFrame extends JFrame {
         });
         
         nav.add(editHotelBtn);
+        nav.add(prevYear);
         nav.add(prev);
         nav.add(dateLabel);
         nav.add(next);
+        nav.add(nextYear);
         nav.add(addBtn);
         add(nav, BorderLayout.SOUTH);
 	}
@@ -183,20 +189,32 @@ public class MainFrame extends JFrame {
 		}
     }
 	
+	enum NavBtnUnit {
+		MONTH,
+		YEAR
+	}
+	
 	final class DateNavBtnListener implements ActionListener {	
 		private long val;
+		private NavBtnUnit unit;
 
 		/**
 		 * Következő/előző hónap listener
 		 * @param val Az érték amit a listener hozzáad az aktuális hónaphoz
+		 * @param unit Hónapot vagy évet lépjen e a gomb
 		 */
-		public DateNavBtnListener(long val) {
+		public DateNavBtnListener(long val, NavBtnUnit unit) {
 			this.val = val;
+			this.unit = unit;
 		}
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			data.setStartDate(data.getStartDate().plusMonths(val));
+			data.setStartDate(
+				unit == NavBtnUnit.MONTH ?
+					data.getStartDate().plusMonths(val) :
+					data.getStartDate().plusYears(val)
+			);
 			dateLabel.setText(data.getStartDate().toString());
 		}
 	}
