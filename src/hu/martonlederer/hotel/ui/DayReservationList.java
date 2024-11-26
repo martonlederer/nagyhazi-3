@@ -84,7 +84,6 @@ public class DayReservationList extends JDialog {
 		for (Reservation reservation : hotel.getReservationsForDay(date)) {
 			JPanel reservationWrapper = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
 		    JButton reservationBtn = new JButton(getReservationTitle(reservation));
-		    JButton deleteBtn = new JButton("x");
 		    
 		    reservationBtn.setHorizontalAlignment(SwingConstants.LEFT);
 		
@@ -113,29 +112,33 @@ public class DayReservationList extends JDialog {
 			    	reservationsPanel.repaint();
 	        	}
 		    });
-		    deleteBtn.addActionListener((e) -> {
-		    	int response = JOptionPane.showConfirmDialog(
-		    		null,
-		    		"Are you sure you want to delete this reservation?",
-		    		"Delete reservation",
-		    		JOptionPane.YES_NO_OPTION
-		    	);
-		    	
-		    	if (response != JOptionPane.YES_OPTION) return;
-		    	hotel.removeReservation(reservation);
-		    	reservationsPanel.remove(reservationWrapper);
-		    	reservationsPanel.revalidate();
-		    	reservationsPanel.repaint();
-		    	
-		    	try {
-					Hotel.save(hotel);
-				} catch (IOException err) {
-					System.out.println("Failed to save hotel file");
-				}
-		    });
 		    
 		    reservationWrapper.add(reservationBtn, BorderLayout.CENTER);
-		    reservationWrapper.add(deleteBtn, BorderLayout.EAST);
+		    
+		    if (date.isAfter(LocalDate.now())) {
+			    JButton deleteBtn = new JButton("x");
+			    deleteBtn.addActionListener((e) -> {
+			    	int response = JOptionPane.showConfirmDialog(
+			    		null,
+			    		"Are you sure you want to delete this reservation?",
+			    		"Delete reservation",
+			    		JOptionPane.YES_NO_OPTION
+			    	);
+			    	
+			    	if (response != JOptionPane.YES_OPTION) return;
+			    	hotel.removeReservation(reservation);
+			    	reservationsPanel.remove(reservationWrapper);
+			    	reservationsPanel.revalidate();
+			    	reservationsPanel.repaint();
+			    	
+			    	try {
+						Hotel.save(hotel);
+					} catch (IOException err) {
+						System.out.println("Failed to save hotel file");
+					}
+			    });
+		    	reservationWrapper.add(deleteBtn, BorderLayout.EAST);
+		    }
 
 		    reservationsPanel.add(reservationWrapper);
 		}

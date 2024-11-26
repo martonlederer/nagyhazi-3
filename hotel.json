@@ -85,26 +85,6 @@
       "from": "2024-11-25",
       "to": "2024-11-26",
       "extras": []
-    },
-    {
-      "customer": {
-        "name": "Test test",
-        "email": "test@test.com",
-        "phoneNumber": "+36307361480",
-        "points": 22
-      },
-      "room": {
-        "name": "Szoba",
-        "price": 50000,
-        "capacity": 2,
-        "count": 4,
-        "facilities": [
-          "Légkondi"
-        ]
-      },
-      "from": "2024-12-01",
-      "to": "2024-12-04",
-      "extras": []
     }
   ]
 }
