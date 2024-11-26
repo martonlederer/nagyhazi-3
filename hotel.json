@@ -1,14 +1,14 @@
 {
   "name": "Tihany hotel",
-  "description": "Ez egy pelda leiras modositva",
-  "rating": "Excellent",
-  "location": "Tihany",
+  "description": "tets",
+  "rating": "Basic",
+  "location": "ftf",
   "rooms": [
     {
       "name": "Szoba",
       "price": 50000,
       "capacity": 2,
-      "count": 4,
+      "count": 100,
       "facilities": [
         "Légkondi"
       ]
@@ -22,43 +22,31 @@
   ],
   "customers": [
     {
-      "name": "Test test",
-      "email": "test@test.com",
-      "phoneNumber": "+36307361480",
-      "points": 28
-    },
-    {
-      "name": "fdfd",
-      "email": "fdfdf",
-      "phoneNumber": "fdfsdfsfsdfds",
-      "points": 11
-    },
-    {
-      "name": "",
-      "email": "",
-      "phoneNumber": "",
-      "points": 12
+      "name": "testf",
+      "email": "fdfd",
+      "phoneNumber": "fdfdf",
+      "points": 3
     }
   ],
   "reservations": [
     {
       "customer": {
-        "name": "Test test",
-        "email": "test@test.com",
-        "phoneNumber": "+36307361480",
-        "points": 1
+        "name": "testf",
+        "email": "fdfd",
+        "phoneNumber": "fdfdf",
+        "points": 3
       },
       "room": {
         "name": "Szoba",
         "price": 50000,
         "capacity": 2,
-        "count": 4,
+        "count": 100,
         "facilities": [
           "Légkondi"
         ]
       },
-      "from": "2024-11-25",
-      "to": "2024-11-26",
+      "from": "2024-11-26",
+      "to": "2024-11-27",
       "extras": [
         {
           "name": "Extra",
@@ -68,102 +56,42 @@
     },
     {
       "customer": {
-        "name": "fdfd",
-        "email": "fdfdf",
-        "phoneNumber": "fdfsdfsfsdfds",
-        "points": 1
+        "name": "testf",
+        "email": "fdfd",
+        "phoneNumber": "fdfdf",
+        "points": 3
       },
       "room": {
         "name": "Szoba",
         "price": 50000,
         "capacity": 2,
-        "count": 4,
+        "count": 100,
         "facilities": [
           "Légkondi"
         ]
       },
-      "from": "2024-11-25",
-      "to": "2024-11-26",
+      "from": "2024-11-26",
+      "to": "2024-11-27",
       "extras": []
     },
     {
       "customer": {
-        "name": "Test test",
-        "email": "test@test.com",
-        "phoneNumber": "+36307361480",
-        "points": 28
+        "name": "testf",
+        "email": "fdfd",
+        "phoneNumber": "fdfdf",
+        "points": 3
       },
       "room": {
         "name": "Szoba",
         "price": 50000,
         "capacity": 2,
-        "count": 4,
+        "count": 100,
         "facilities": [
           "Légkondi"
         ]
       },
-      "from": "2024-11-27",
-      "to": "2024-11-30",
-      "extras": []
-    },
-    {
-      "customer": {
-        "name": "fdfd",
-        "email": "fdfdf",
-        "phoneNumber": "fdfsdfsfsdfds",
-        "points": 11
-      },
-      "room": {
-        "name": "Szoba",
-        "price": 50000,
-        "capacity": 2,
-        "count": 4,
-        "facilities": [
-          "Légkondi"
-        ]
-      },
-      "from": "2024-11-27",
-      "to": "2024-11-30",
-      "extras": []
-    },
-    {
-      "customer": {
-        "name": "fdfd",
-        "email": "fdfdf",
-        "phoneNumber": "fdfsdfsfsdfds",
-        "points": 11
-      },
-      "room": {
-        "name": "Szoba",
-        "price": 50000,
-        "capacity": 2,
-        "count": 4,
-        "facilities": [
-          "Légkondi"
-        ]
-      },
-      "from": "2024-11-27",
-      "to": "2024-11-30",
-      "extras": []
-    },
-    {
-      "customer": {
-        "name": "Test test",
-        "email": "test@test.com",
-        "phoneNumber": "+36307361480",
-        "points": 28
-      },
-      "room": {
-        "name": "Szoba",
-        "price": 50000,
-        "capacity": 2,
-        "count": 4,
-        "facilities": [
-          "Légkondi"
-        ]
-      },
-      "from": "2024-11-27",
-      "to": "2024-11-30",
+      "from": "2024-11-26",
+      "to": "2024-11-27",
       "extras": []
     }
   ]

@@ -7,6 +7,9 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -17,6 +20,7 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -129,10 +133,40 @@ public class HotelDialog extends JDialog {
         
         add(formPanel, BorderLayout.NORTH);
         
+        JPanel btnsPanel = new JPanel(new BorderLayout());
+        
         JButton saveBtn = new JButton("Save");
         saveBtn.addActionListener((e) -> saveHotel());
+        btnsPanel.add(saveBtn, BorderLayout.NORTH);
+        
+        if (hotel != null) {
+        	JButton deleteBtn = new JButton("Delete");
+        	deleteBtn.addActionListener((e) -> {
+        		int response = JOptionPane.showConfirmDialog(
+			    	null,
+			    	"Are you sure you want to delete the entire hotel?",
+			   		"Delete hotel",
+			   		JOptionPane.YES_NO_OPTION
+			   	);
+			    	
+			    if (response != JOptionPane.YES_OPTION) return;
 
-		add(saveBtn, BorderLayout.SOUTH);
+			    try {
+					Files.deleteIfExists(Paths.get(Hotel.savePath));
+					System.exit(0);
+				} catch (IOException e1) {
+					JOptionPane.showMessageDialog(
+						this,
+					    "Could not delete hotel!",
+					    "Error",
+					    JOptionPane.ERROR_MESSAGE
+					);
+				}
+        	});
+            btnsPanel.add(deleteBtn, BorderLayout.SOUTH);
+        }
+
+		add(btnsPanel, BorderLayout.SOUTH);
 	}
 	
 	/**

@@ -252,6 +252,15 @@ public class ReservationDialog extends JDialog {
 		if (reservation != null && reservation.getCheckinDate().isAfter(LocalDate.now())) {
 			JButton deleteBtn = new JButton("Delete");
 			deleteBtn.addActionListener((e) -> {
+				int response = JOptionPane.showConfirmDialog(
+			    	null,
+			    	"Are you sure you want to delete this reservation?",
+			   		"Delete reservation",
+			   		JOptionPane.YES_NO_OPTION
+			    );
+			    
+			    if (response != JOptionPane.YES_OPTION) return;
+			    	
 				hotel.removeReservation(reservation);
 				reservation = null;
 				dispose();
