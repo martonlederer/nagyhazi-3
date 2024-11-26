@@ -72,4 +72,44 @@ class ReservationTest {
 		
 		assertEquals(135700, res.getTotalPrice());
 	}
+	
+	@Test
+	void testDiscountedNights() {
+		// 1 free night
+		Reservation res = new Reservation(
+			new Customer("test test", "test@test.com", "+36507325555", 20),
+			room,
+			LocalDate.parse("2023-11-05"),
+			LocalDate.parse("2023-11-07"),
+			List.of()
+		);
+		
+		assertEquals(1, res.getDiscountedNights());
+	}
+	
+	@Test
+	void testNoPointsNoDiscount() {
+		Reservation res = new Reservation(
+			new Customer("test test", "test@test.com", "+36507325555", 0),
+			room,
+			LocalDate.parse("2023-11-05"),
+			LocalDate.parse("2023-11-10"),
+			List.of()
+		);
+		
+		assertEquals(0, res.getDiscountedNights());
+	}
+	
+	@Test
+	void testOneNightNoDiscount() {
+		Reservation res = new Reservation(
+			new Customer("test test", "test@test.com", "+36507325555", 40),
+			room,
+			LocalDate.parse("2023-11-05"),
+			LocalDate.parse("2023-11-06"),
+			List.of()
+		);
+		
+		assertEquals(0, res.getDiscountedNights());
+	}
 }
