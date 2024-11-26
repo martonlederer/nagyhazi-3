@@ -237,6 +237,7 @@ public class HotelDialog extends JDialog {
 	 */
 	private void addRoom() {
         roomTableModel.addRow(new Object[]{ "Szoba", 50000, 2, "Légkondi", 100 });
+        roomTableModel.fireTableDataChanged();
     }
 
 	/**
@@ -244,6 +245,7 @@ public class HotelDialog extends JDialog {
 	 */
     private void addExtra() {
         extrasTableModel.addRow(new Object[]{ "Extra", 8000 });
+        roomTableModel.fireTableDataChanged();
     }
 	
 	/**

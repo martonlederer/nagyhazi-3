@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"hu.martonlederer.hotel"},{"l":"hu.martonlederer.hotel.ui"}];updateSearchResults();
